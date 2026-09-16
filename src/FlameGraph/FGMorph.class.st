@@ -1,5 +1,5 @@
 Class {
-	#name : #FlameGraphMorph,
+	#name : #FGMorph,
 	#superclass : #Morph,
 	#instVars : [
 		'rootNode',
@@ -12,7 +12,7 @@ Class {
 	#category : #'instance creation',
 	#'squeak_changestamp' : 'mad 9/16/2026 00:29'
 }
-FlameGraphMorph class >> on: aMessageTally [
+FGMorph class >> on: aMessageTally [
 	^ self new
 		rootNode: aMessageTally;
 		yourself
@@ -22,7 +22,7 @@ FlameGraphMorph class >> on: aMessageTally [
 	#category : #accessing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:29'
 }
-FlameGraphMorph >> basicZoom: aNumber [
+FGMorph >> basicZoom: aNumber [
 	zoom := aNumber.
 ]
 
@@ -30,7 +30,7 @@ FlameGraphMorph >> basicZoom: aNumber [
 	#category : #sizing,
 	#'squeak_changestamp' : 'mad 9/15/2026 23:47'
 }
-FlameGraphMorph >> childrenAndOffsetsOf: aMessageTally do: aBlock [
+FGMorph >> childrenAndOffsetsOf: aMessageTally do: aBlock [
 	| x |
 	x := 0.
 	(self childrenOf: aMessageTally) do: [:each |
@@ -42,7 +42,7 @@ FlameGraphMorph >> childrenAndOffsetsOf: aMessageTally do: aBlock [
 	#category : #accessing,
 	#'squeak_changestamp' : 'mad 9/15/2026 23:47'
 }
-FlameGraphMorph >> childrenOf: aMessageTally [
+FGMorph >> childrenOf: aMessageTally [
 	^ aMessageTally childrenOver: 0
 ]
 
@@ -50,7 +50,7 @@ FlameGraphMorph >> childrenOf: aMessageTally [
 	#category : #drawing,
 	#'squeak_changestamp' : 'mad 9/15/2026 21:37'
 }
-FlameGraphMorph >> colorFor: aMessageTally [
+FGMorph >> colorFor: aMessageTally [
 	^ [WeakIdentityKeyDictionary new] once at: aMessageTally method ifAbsentPut: [Color random]
 ]
 
@@ -58,7 +58,7 @@ FlameGraphMorph >> colorFor: aMessageTally [
 	#category : #drawing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:02'
 }
-FlameGraphMorph >> drawChildrenOf: aMessageTally on: aCanvas startingAt: aPoint textWithin: aRectangle [
+FGMorph >> drawChildrenOf: aMessageTally on: aCanvas startingAt: aPoint textWithin: aRectangle [
 	self childrenAndOffsetsOf: aMessageTally do: [:each :offset |
 		self drawNodeAndChildren: each on: aCanvas startingAt: aPoint + (offset @ 0) textWithin: aRectangle].
 ]
@@ -67,7 +67,7 @@ FlameGraphMorph >> drawChildrenOf: aMessageTally on: aCanvas startingAt: aPoint 
 	#category : #drawing,
 	#'squeak_changestamp' : 'mad 9/16/2026 01:29'
 }
-FlameGraphMorph >> drawNode: aMessageTally on: aCanvas in: nodeRectangle textWithin: textBoundsRectangle [
+FGMorph >> drawNode: aMessageTally on: aCanvas in: nodeRectangle textWithin: textBoundsRectangle [
 	| nodeColor textRectangle continued |
 	(nodeRectangle intersects: aCanvas clipRect) ifFalse: [^ self].
 	nodeColor := self colorFor: aMessageTally.
@@ -87,7 +87,7 @@ FlameGraphMorph >> drawNode: aMessageTally on: aCanvas in: nodeRectangle textWit
 	#category : #drawing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:04'
 }
-FlameGraphMorph >> drawNodeAndChildren: aMessageTally on: aCanvas startingAt: aPoint textWithin: aRectangle [
+FGMorph >> drawNodeAndChildren: aMessageTally on: aCanvas startingAt: aPoint textWithin: aRectangle [
 	| rectangle |
 	rectangle := aPoint extent: (self widthOf: aMessageTally) @ self nodeHeight.
 	(rectangle width >= 1 and: [(rectangle withHeight: Float infinity) intersects: aCanvas clipRect]) ifFalse: [^ self].
@@ -100,7 +100,7 @@ FlameGraphMorph >> drawNodeAndChildren: aMessageTally on: aCanvas startingAt: aP
 	#category : #drawing,
 	#'squeak_changestamp' : 'mad 9/16/2026 01:19'
 }
-FlameGraphMorph >> drawOn: aCanvas [
+FGMorph >> drawOn: aCanvas [
 	| textBounds |
 	textBounds := (self ownerThatIsA: ScrollPane)
 		ifNil: [self bounds]
@@ -113,7 +113,7 @@ FlameGraphMorph >> drawOn: aCanvas [
 	#category : #'event handling',
 	#'squeak_changestamp' : 'mad 9/15/2026 23:45'
 }
-FlameGraphMorph >> findNodeAt: aPoint below: aMessageTally ifFound: aBlock [
+FGMorph >> findNodeAt: aPoint below: aMessageTally ifFound: aBlock [
 	(aPoint y >= 0 and: [aPoint x between: 0 and: (self widthOf: aMessageTally)]) ifFalse: [^ self].
 	aPoint y <= self nodeHeight ifTrue: [^ aBlock value: aMessageTally].
 	self childrenAndOffsetsOf: aMessageTally do: [:each :offset |
@@ -127,7 +127,7 @@ FlameGraphMorph >> findNodeAt: aPoint below: aMessageTally ifFound: aBlock [
 	#category : #'event handling',
 	#'squeak_changestamp' : 'mad 9/15/2026 22:21'
 }
-FlameGraphMorph >> handlesKeyboard: anEvent [
+FGMorph >> handlesKeyboard: anEvent [
 	^ true
 ]
 
@@ -135,7 +135,7 @@ FlameGraphMorph >> handlesKeyboard: anEvent [
 	#category : #'event handling',
 	#'squeak_changestamp' : 'mad 9/15/2026 23:35'
 }
-FlameGraphMorph >> handlesMouseDown: anEvent [
+FGMorph >> handlesMouseDown: anEvent [
 	^ true
 ]
 
@@ -143,7 +143,7 @@ FlameGraphMorph >> handlesMouseDown: anEvent [
 	#category : #sizing,
 	#'squeak_changestamp' : 'mad 9/15/2026 23:47'
 }
-FlameGraphMorph >> heightOf: aMessageTally [
+FGMorph >> heightOf: aMessageTally [
 	^ self nodeHeight +
 		((self childrenOf: aMessageTally)
 			ifEmpty: [0]
@@ -155,7 +155,7 @@ FlameGraphMorph >> heightOf: aMessageTally [
 	#category : #initialization,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:30'
 }
-FlameGraphMorph >> initialize [
+FGMorph >> initialize [
 	super initialize.
 	self basicZoom: 0.
 ]
@@ -164,7 +164,7 @@ FlameGraphMorph >> initialize [
 	#category : #'event handling',
 	#'squeak_changestamp' : 'mad 9/16/2026 01:20'
 }
-FlameGraphMorph >> keyStroke: anEvent [
+FGMorph >> keyStroke: anEvent [
 	anEvent key caseOf: {
 		[$W] -> [self zoom: self zoom + 1].
 		[$S] -> [self zoom: self zoom - 1].
@@ -175,7 +175,7 @@ FlameGraphMorph >> keyStroke: anEvent [
 	#category : #'event handling',
 	#'squeak_changestamp' : 'mad 9/16/2026 00:34'
 }
-FlameGraphMorph >> mouseDown: anEvent [
+FGMorph >> mouseDown: anEvent [
 	anEvent redButtonPressed ifFalse: [^ self].
 	anEvent hand mouseFocus = self ifFalse: [^ self].
 	self findNodeAt: anEvent position below: self rootNode ifFound: [:node |
@@ -189,7 +189,7 @@ FlameGraphMorph >> mouseDown: anEvent [
 	#category : #sizing,
 	#'squeak_changestamp' : 'mad 9/16/2026 01:27'
 }
-FlameGraphMorph >> nodeHeight [
+FGMorph >> nodeHeight [
 	^ TextStyle defaultFont height + (2 * FlameGraph textPadding px)
 ]
 
@@ -197,7 +197,7 @@ FlameGraphMorph >> nodeHeight [
 	#category : #scrolling,
 	#'squeak_changestamp' : 'mad 9/15/2026 23:28'
 }
-FlameGraphMorph >> preserveScrollingOffsetDuring: aBlock [
+FGMorph >> preserveScrollingOffsetDuring: aBlock [
 	| pane centerPercentage |
 	pane := (self ownerThatIsA: ScrollPane) ifNil: [^ aBlock value].
 	centerPercentage := (pane scroller offset x + (pane scroller width / 2)) / self width.
@@ -211,7 +211,7 @@ FlameGraphMorph >> preserveScrollingOffsetDuring: aBlock [
 	#category : #sizing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:28'
 }
-FlameGraphMorph >> recomputeExtent [
+FGMorph >> recomputeExtent [
 	self extent: (self widthOf: self rootNode) @ (self heightOf: self rootNode).
 ]
 
@@ -219,7 +219,7 @@ FlameGraphMorph >> recomputeExtent [
 	#category : #accessing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:29'
 }
-FlameGraphMorph >> rootNode [
+FGMorph >> rootNode [
 	^ rootNode
 ]
 
@@ -227,7 +227,7 @@ FlameGraphMorph >> rootNode [
 	#category : #accessing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:28'
 }
-FlameGraphMorph >> rootNode: aMessageTally [
+FGMorph >> rootNode: aMessageTally [
 	rootNode := aMessageTally.
 	self recomputeExtent.
 ]
@@ -236,7 +236,7 @@ FlameGraphMorph >> rootNode: aMessageTally [
 	#category : #sizing,
 	#'squeak_changestamp' : 'mad 9/16/2026 01:20'
 }
-FlameGraphMorph >> widthOf: aMessageTally [
+FGMorph >> widthOf: aMessageTally [
 	^ aMessageTally tally px * ((self zoom * 0.2) exp)
 ]
 
@@ -244,7 +244,7 @@ FlameGraphMorph >> widthOf: aMessageTally [
 	#category : #accessing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:27'
 }
-FlameGraphMorph >> zoom [
+FGMorph >> zoom [
 	^ zoom
 ]
 
@@ -252,7 +252,7 @@ FlameGraphMorph >> zoom [
 	#category : #accessing,
 	#'squeak_changestamp' : 'mad 9/16/2026 00:30'
 }
-FlameGraphMorph >> zoom: aNumber [
+FGMorph >> zoom: aNumber [
 	self preserveScrollingOffsetDuring: [
 		self basicZoom: aNumber.
 		self recomputeExtent].

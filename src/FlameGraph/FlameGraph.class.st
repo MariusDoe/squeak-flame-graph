@@ -72,11 +72,11 @@ FlameGraph class >> numberPreferenceValue: aNumberOrString check: aBlock [
 
 {
 	#category : #'instance creation',
-	#'squeak_changestamp' : 'mad 9/16/2026 00:28'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:32'
 }
 FlameGraph class >> on: aMessageTally [
 	^ self new
-		morph: (FlameGraphMorph on: aMessageTally);
+		morph: (FGMorph on: aMessageTally);
 		open
 ]
 
@@ -146,10 +146,10 @@ FlameGraph >> morph [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'mad 9/16/2026 00:26'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:32'
 }
-FlameGraph >> morph: aFlameGraphMorph [
-	morph := aFlameGraphMorph
+FlameGraph >> morph: anFGMorph [
+	morph := anFGMorph
 ]
 
 {
