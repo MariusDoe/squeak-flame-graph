@@ -108,6 +108,14 @@ FlameGraph class >> on: aMessageTally [
 ]
 
 {
+	#category : #profiling,
+	#'squeak_changestamp' : 'mad 9/16/2026 12:36'
+}
+FlameGraph class >> profile: aBlock [
+	^ self on: (FGProfiler new profile: aBlock)
+]
+
+{
 	#category : #preferences,
 	#'squeak_changestamp' : 'mad 9/16/2026 01:26'
 }
