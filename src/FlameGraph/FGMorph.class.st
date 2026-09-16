@@ -28,49 +28,41 @@ FGMorph >> basicZoom: aNumber [
 
 {
 	#category : #sizing,
-	#'squeak_changestamp' : 'mad 9/15/2026 23:47'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:40'
 }
-FGMorph >> childrenAndOffsetsOf: aMessageTally do: aBlock [
+FGMorph >> childrenAndOffsetsOf: anFGNode do: aBlock [
 	| x |
 	x := 0.
-	(self childrenOf: aMessageTally) do: [:each |
+	anFGNode children do: [:each |
 		aBlock value: each value: x.
 		x := x + (self widthOf: each)].
 ]
 
 {
-	#category : #accessing,
-	#'squeak_changestamp' : 'mad 9/15/2026 23:47'
+	#category : #drawing,
+	#'squeak_changestamp' : 'mad 9/16/2026 10:40'
 }
-FGMorph >> childrenOf: aMessageTally [
-	^ aMessageTally childrenOver: 0
+FGMorph >> colorFor: anFGNode [
+	^ [WeakIdentityKeyDictionary new] once at: anFGNode colorKey ifAbsentPut: [Color random]
 ]
 
 {
 	#category : #drawing,
-	#'squeak_changestamp' : 'mad 9/15/2026 21:37'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:41'
 }
-FGMorph >> colorFor: aMessageTally [
-	^ [WeakIdentityKeyDictionary new] once at: aMessageTally method ifAbsentPut: [Color random]
-]
-
-{
-	#category : #drawing,
-	#'squeak_changestamp' : 'mad 9/16/2026 00:02'
-}
-FGMorph >> drawChildrenOf: aMessageTally on: aCanvas startingAt: aPoint textWithin: aRectangle [
-	self childrenAndOffsetsOf: aMessageTally do: [:each :offset |
+FGMorph >> drawChildrenOf: anFGNode on: aCanvas startingAt: aPoint textWithin: aRectangle [
+	self childrenAndOffsetsOf: anFGNode do: [:each :offset |
 		self drawNodeAndChildren: each on: aCanvas startingAt: aPoint + (offset @ 0) textWithin: aRectangle].
 ]
 
 {
 	#category : #drawing,
-	#'squeak_changestamp' : 'mad 9/16/2026 01:29'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:41'
 }
-FGMorph >> drawNode: aMessageTally on: aCanvas in: nodeRectangle textWithin: textBoundsRectangle [
+FGMorph >> drawNode: anFGNode on: aCanvas in: nodeRectangle textWithin: textBoundsRectangle [
 	| nodeColor textRectangle continued |
 	(nodeRectangle intersects: aCanvas clipRect) ifFalse: [^ self].
-	nodeColor := self colorFor: aMessageTally.
+	nodeColor := self colorFor: anFGNode.
 	FlameGraph fillAlpha > 0 ifTrue: [
 		aCanvas fillRectangle: nodeRectangle color: (nodeColor alpha: FlameGraph fillAlpha)].
 	aCanvas frameRectangle: nodeRectangle color: nodeColor.
@@ -78,22 +70,22 @@ FGMorph >> drawNode: aMessageTally on: aCanvas in: nodeRectangle textWithin: tex
 	continued := textRectangle left > nodeRectangle left.
 	textRectangle := textRectangle insetBy: FlameGraph textPadding px.
 	textRectangle width >= FlameGraph minimumTextWidth px ifTrue: [ | string |
-		string := aMessageTally printString.
+		string := anFGNode printString.
 		continued ifTrue: [string := '...{1}' format: {string}].
 		aCanvas drawString: string in: textRectangle font: nil color: nodeColor].
 ]
 
 {
 	#category : #drawing,
-	#'squeak_changestamp' : 'mad 9/16/2026 00:04'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:41'
 }
-FGMorph >> drawNodeAndChildren: aMessageTally on: aCanvas startingAt: aPoint textWithin: aRectangle [
+FGMorph >> drawNodeAndChildren: anFGNode on: aCanvas startingAt: aPoint textWithin: aRectangle [
 	| rectangle |
-	rectangle := aPoint extent: (self widthOf: aMessageTally) @ self nodeHeight.
+	rectangle := aPoint extent: (self widthOf: anFGNode) @ self nodeHeight.
 	(rectangle width >= 1 and: [(rectangle withHeight: Float infinity) intersects: aCanvas clipRect]) ifFalse: [^ self].
 	self
-		drawNode: aMessageTally on: aCanvas in: rectangle textWithin: aRectangle;
-		drawChildrenOf: aMessageTally on: aCanvas startingAt: aPoint x @ (aPoint y + self nodeHeight) textWithin: aRectangle.
+		drawNode: anFGNode on: aCanvas in: rectangle textWithin: aRectangle;
+		drawChildrenOf: anFGNode on: aCanvas startingAt: aPoint x @ (aPoint y + self nodeHeight) textWithin: aRectangle.
 ]
 
 {
@@ -111,12 +103,12 @@ FGMorph >> drawOn: aCanvas [
 
 {
 	#category : #'event handling',
-	#'squeak_changestamp' : 'mad 9/15/2026 23:45'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:41'
 }
-FGMorph >> findNodeAt: aPoint below: aMessageTally ifFound: aBlock [
-	(aPoint y >= 0 and: [aPoint x between: 0 and: (self widthOf: aMessageTally)]) ifFalse: [^ self].
-	aPoint y <= self nodeHeight ifTrue: [^ aBlock value: aMessageTally].
-	self childrenAndOffsetsOf: aMessageTally do: [:each :offset |
+FGMorph >> findNodeAt: aPoint below: anFGNode ifFound: aBlock [
+	(aPoint y >= 0 and: [aPoint x between: 0 and: (self widthOf: anFGNode)]) ifFalse: [^ self].
+	aPoint y <= self nodeHeight ifTrue: [^ aBlock value: anFGNode].
+	self childrenAndOffsetsOf: anFGNode do: [:each :offset |
 		self
 			findNodeAt: aPoint - (offset @ self nodeHeight)
 			below: each
@@ -141,14 +133,10 @@ FGMorph >> handlesMouseDown: anEvent [
 
 {
 	#category : #sizing,
-	#'squeak_changestamp' : 'mad 9/15/2026 23:47'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:40'
 }
-FGMorph >> heightOf: aMessageTally [
-	^ self nodeHeight +
-		((self childrenOf: aMessageTally)
-			ifEmpty: [0]
-			ifNotEmpty: [:children |
-				(children collect: [:each | self heightOf: each]) max])
+FGMorph >> heightOf: anFGNode [
+	^ anFGNode depth * self nodeHeight
 ]
 
 {
@@ -173,16 +161,14 @@ FGMorph >> keyStroke: anEvent [
 
 {
 	#category : #'event handling',
-	#'squeak_changestamp' : 'mad 9/16/2026 00:34'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:44'
 }
 FGMorph >> mouseDown: anEvent [
 	anEvent redButtonPressed ifFalse: [^ self].
 	anEvent hand mouseFocus = self ifFalse: [^ self].
 	self findNodeAt: anEvent position below: self rootNode ifFound: [:node |
 		Project current addDeferredUIMessage: [
-			anEvent shiftPressed
-				ifTrue: [node inspect]
-				ifFalse: [node method homeMethod browse]]].
+			node mouseDown: anEvent]].
 ]
 
 {
@@ -225,19 +211,19 @@ FGMorph >> rootNode [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'mad 9/16/2026 00:28'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:41'
 }
-FGMorph >> rootNode: aMessageTally [
-	rootNode := aMessageTally.
+FGMorph >> rootNode: anFGNode [
+	rootNode := anFGNode.
 	self recomputeExtent.
 ]
 
 {
 	#category : #sizing,
-	#'squeak_changestamp' : 'mad 9/16/2026 01:20'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:37'
 }
-FGMorph >> widthOf: aMessageTally [
-	^ aMessageTally tally px * ((self zoom * 0.2) exp)
+FGMorph >> widthOf: anFGNode [
+	^ anFGNode width px * ((self zoom * 0.2) exp)
 ]
 
 {
