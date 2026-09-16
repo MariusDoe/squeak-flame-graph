@@ -38,6 +38,14 @@ FGNode >> mouseDown: anEvent [
 
 {
 	#category : #accessing,
+	#'squeak_changestamp' : 'mad 9/16/2026 10:59'
+}
+FGNode >> startOffset [
+	self subclassResponsibility.
+]
+
+{
+	#category : #accessing,
 	#'squeak_changestamp' : 'mad 9/16/2026 10:37'
 }
 FGNode >> width [

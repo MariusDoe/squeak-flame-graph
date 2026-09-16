@@ -27,18 +27,6 @@ FGMorph >> basicZoom: aNumber [
 ]
 
 {
-	#category : #sizing,
-	#'squeak_changestamp' : 'mad 9/16/2026 10:40'
-}
-FGMorph >> childrenAndOffsetsOf: anFGNode do: aBlock [
-	| x |
-	x := 0.
-	anFGNode children do: [:each |
-		aBlock value: each value: x.
-		x := x + (self widthOf: each)].
-]
-
-{
 	#category : #drawing,
 	#'squeak_changestamp' : 'mad 9/16/2026 10:40'
 }
@@ -48,11 +36,11 @@ FGMorph >> colorFor: anFGNode [
 
 {
 	#category : #drawing,
-	#'squeak_changestamp' : 'mad 9/16/2026 10:41'
+	#'squeak_changestamp' : 'mad 9/16/2026 11:06'
 }
 FGMorph >> drawChildrenOf: anFGNode on: aCanvas startingAt: aPoint textWithin: aRectangle [
-	self childrenAndOffsetsOf: anFGNode do: [:each :offset |
-		self drawNodeAndChildren: each on: aCanvas startingAt: aPoint + (offset @ 0) textWithin: aRectangle].
+	anFGNode children do: [:each |
+		self drawNodeAndChildren: each on: aCanvas startingAt: aPoint + (each startOffset * self zoomFactor @ 0) textWithin: aRectangle].
 ]
 
 {
@@ -103,14 +91,14 @@ FGMorph >> drawOn: aCanvas [
 
 {
 	#category : #'event handling',
-	#'squeak_changestamp' : 'mad 9/16/2026 10:41'
+	#'squeak_changestamp' : 'mad 9/16/2026 11:06'
 }
 FGMorph >> findNodeAt: aPoint below: anFGNode ifFound: aBlock [
 	(aPoint y >= 0 and: [aPoint x between: 0 and: (self widthOf: anFGNode)]) ifFalse: [^ self].
 	aPoint y <= self nodeHeight ifTrue: [^ aBlock value: anFGNode].
-	self childrenAndOffsetsOf: anFGNode do: [:each :offset |
+	anFGNode children do: [:each |
 		self
-			findNodeAt: aPoint - (offset @ self nodeHeight)
+			findNodeAt: aPoint - (each startOffset * self zoomFactor @ self nodeHeight)
 			below: each
 			ifFound: [:node | ^ aBlock value: node]].
 ]
@@ -220,10 +208,10 @@ FGMorph >> rootNode: anFGNode [
 
 {
 	#category : #sizing,
-	#'squeak_changestamp' : 'mad 9/16/2026 10:37'
+	#'squeak_changestamp' : 'mad 9/16/2026 11:05'
 }
 FGMorph >> widthOf: anFGNode [
-	^ anFGNode width px * ((self zoom * 0.2) exp)
+	^ anFGNode width * self zoomFactor
 ]
 
 {
@@ -242,4 +230,12 @@ FGMorph >> zoom: aNumber [
 	self preserveScrollingOffsetDuring: [
 		self basicZoom: aNumber.
 		self recomputeExtent].
+]
+
+{
+	#category : #sizing,
+	#'squeak_changestamp' : 'mad 9/16/2026 11:04'
+}
+FGMorph >> zoomFactor [
+	^ 1 px * ((self zoom * 0.2) exp)
 ]

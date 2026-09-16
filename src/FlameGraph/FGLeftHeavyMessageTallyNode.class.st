@@ -6,8 +6,8 @@ Class {
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'mad 9/16/2026 10:49'
+	#'squeak_changestamp' : 'mad 9/16/2026 11:08'
 }
-FGLeftHeavyMessageTallyNode >> children [
-	^ super children sorted: #width descending
+FGLeftHeavyMessageTallyNode >> rawChildren [
+	^ super rawChildren sorted: #tally descending
 ]
