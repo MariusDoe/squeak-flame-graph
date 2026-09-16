@@ -9,6 +9,15 @@ GSMetadata {
 			#path : FSAbsolutePath [
 				'src'
 			]
+		},
+		GSTonelMapper {
+			#version : 1,
+			#package : MCPackage {
+				#name : 'BaselineOfFlameGraph'
+			},
+			#path : FSAbsolutePath [
+				'src'
+			]
 		}
 	],
 	#name : 'squeak-flame-graph'
