@@ -37,13 +37,29 @@ FlameGraph class >> fillAlpha: aNumber [
 
 {
 	#category : #profiling,
-	#'squeak_changestamp' : 'mad 9/16/2026 10:47'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:50'
+}
+FlameGraph class >> leftHeavyMessageTallyOn: aBlock [
+	^ self messageTallyOn: aBlock nodeClass: FGLeftHeavyMessageTallyNode
+]
+
+{
+	#category : #profiling,
+	#'squeak_changestamp' : 'mad 9/16/2026 10:50'
 }
 FlameGraph class >> messageTallyOn: aBlock [
+	^ self messageTallyOn: aBlock nodeClass: FGMessageTallyNode
+]
+
+{
+	#category : #profiling,
+	#'squeak_changestamp' : 'mad 9/16/2026 10:50'
+}
+FlameGraph class >> messageTallyOn: aBlock nodeClass: anFGMessageTallyNodeClass [
 	| node |
 	node := MessageTally new.
 	node spyEvery: node class defaultPollPeriod on: aBlock.
-	^ self on: (FGMessageTallyNode on: node)
+	^ self on: (anFGMessageTallyNodeClass on: node)
 ]
 
 {

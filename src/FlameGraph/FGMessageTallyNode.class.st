@@ -19,10 +19,10 @@ FGMessageTallyNode class >> on: aMessageTally [
 
 {
 	#category : #accessing,
-	#'squeak_changestamp' : 'mad 9/16/2026 10:43'
+	#'squeak_changestamp' : 'mad 9/16/2026 10:54'
 }
 FGMessageTallyNode >> children [
-	^ (self tally childrenOver: 0) collect: [:each | self class on: each]
+	^ (self tally childrenOver: 0) collect: [:each | self species on: each]
 ]
 
 {
